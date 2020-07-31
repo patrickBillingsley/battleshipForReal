@@ -21,3 +21,24 @@ div#board {
         "50 51 52 53 54 55 56"
         "60 61 62 63 64 65 66";
 }
+
+div.gridSquare {
+    outline: 1px solid green;
+}
+
+div#messageArea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white;
+}
+
+.hit {
+    background: url("images/ship.png") no-repeat center center;
+    background-size: contain;
+}
+
+.miss {
+    background: url("images/miss.png") no-repeat center center;
+    background-size: contain;
+}
