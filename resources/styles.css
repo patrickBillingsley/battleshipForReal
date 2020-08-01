@@ -6,6 +6,7 @@ body {
     position: relative;
     justify-content: center;
     align-items: center;
+    color: green;
 }
 
 div#board {

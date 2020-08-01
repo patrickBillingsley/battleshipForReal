@@ -19,10 +19,52 @@ const model = {
     shipLength: 3,
     shipsSunk: 0,
 
-    ships: [{locations: ["06", "16", "26"], hits: ["", "", ""]},
-            {locations: ["24", "34", "44"], hits: ["", "", ""]},
-            {locations: ["10", "11", "12"], hits: ["", "", ""]}],
-    
+    ships: [{locations: ["0", "0", "0"], hits: ["", "", ""]},
+            {locations: ["0", "0", "0"], hits: ["", "", ""]},
+            {locations: ["0", "0", "0"], hits: ["", "", ""]}],
+
+    generateShipLocations: function() {
+        let locations;
+        for (let i = 0; i < this.numShips; i++) {
+            do {
+                locations = this.generateShip();
+            } while (this.collision(locations));
+            this.ships[i].locations = locations;
+        }
+    },
+    generateShip: function() {
+        const direction = Math.floor(Math.random() * 2);
+        let row;
+        let col;
+        if (direction === 1) {
+            row = Math.floor(Math.random() * this.boardSize);
+            col = Math.floor(Math.random() * (this.boardSize - (this.shipLength + 1)));
+        } else {
+            row = Math.floor(Math.random() * (this.boardSize - (this.shipLength + 1)));
+            col = Math.floor(Math.random() * this.boardSize);
+        }
+        
+        const newShipLocations = [];
+        for (let i = 0; i < this.shipLength; i++) {
+            if (direction === 1) {
+                newShipLocations.push(row + "" + (col + i));
+            } else {
+                newShipLocations.push((row + i) + "" + col);
+            }
+        }
+        return newShipLocations;
+    },
+    collision: function(locations) {
+        for (let i = 0; i < this.numShips; i++) {
+            const ship = this.ships[i];
+            for (let j = 0; j < locations.length; j++) {
+                if (ship.locations.indexOf(locations[j])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
     fire: function(guess) {
         for (let i = 0; i < this.numShips; i++) {
             let ship = this.ships[i];
@@ -59,10 +101,10 @@ const controller = {
     processGuess: function(guess) {
         const location = parseGuess(guess);
         if (location) {
-            this.guess++;
+            this.guesses++;
             const hit = model.fire(location);
             if (hit && model.shipsSunk === model.numShips) {
-                view.displayMessage("You sank all my battleships, in " + this.guess + " guesses");
+                view.displayMessage("You sank all my battleships, in " + this.guesses + " guesses");
             }
         }
     }
@@ -89,48 +131,29 @@ function parseGuess(guess) {
     return null;
 }
 
+function init() {
+    const fireButton = document.getElementById("fireButton");
+    fireButton.onclick = handleFireButton;
+    const guessInput = document.getElementById("guessInput");
+    guessInput.onkeypress = handleKeyPress;
 
+    model.generateShipLocations();
+}
 
+function handleFireButton() {
+    const guessInput = document.getElementById("guessInput");
+    const guess = guessInput.value;
+    controller.processGuess(guess);
 
-console.log(parseGuess("A0"));
-console.log(parseGuess("B6"));
-console.log(parseGuess("G3"));
-console.log(parseGuess("H0"));
-console.log(parseGuess("A7"));
+    guessInput.value = "";
+}
 
+function handleKeyPress(e) {
+    const fireButton = document.getElementById("fireButton");
+    if (e.keyCode === 13) {
+        fireButton.click();
+        return false;
+    }
+}
 
-
-
-
-
-
-
-
-// model.fire("53");
-
-// model.fire("06");
-// model.fire("16");
-// model.fire("26");
-
-// model.fire("34");
-// model.fire("24");
-// model.fire("44");
-
-// model.fire("12");
-// model.fire("11");
-// model.fire("10");
-
-
-
-
-
-
-
-// view.displayMiss("00");
-// view.displayHit("34");
-// view.displayMiss("55");
-// view.displayHit("12");
-// view.displayMiss("25");
-// view.displayHit("26");
-
-// view.displayMessage("Can you hear me?");
+window.onload = init;
