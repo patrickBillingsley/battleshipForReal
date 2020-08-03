@@ -11,54 +11,30 @@ body {
     width: 100%;
     height: 100vh;
     background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    grid-template-columns: 1fr 75vh 1fr;
+    grid-template-rows: 12.5vh 75vh 12.5vh;
+    display: grid;
     color: green;
 }
 
-div#board {
-    width: 75vh;
-    height: 75vh;
+div.board {
+    grid-column: 2;
+    grid-row: 2;
     display: grid;
     grid-template-columns: repeat(11, 1fr);
     grid-template-rows: repeat(11, 1fr);
-    grid-template-areas: 
-        " fix   num   num   num   num   num   num   num   num   num   num"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board"
-        "char board board board board board board board board board board";
-    position: absolute;
-    justify-self: center;
+    text-align: center;
 }
 
-div.gridSquare {
+.numSquare,
+.charSquare {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.gridSquare {
     outline: 1px solid green;
-    grid-area: 
-}
-
-div.numSquare,
-div.charSquare {
-    display: flex;
-}
-
-div.numSquare {
-    grid-area: num;
-}
-
-div.charSquare {
-    grid-area: char;
-}
-
-div.squareFix {
-    grid-area: fix;
 }
 
 div#messageArea {
@@ -69,13 +45,9 @@ div#messageArea {
 }
 
 form {
-    height: 50vh;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    left: 75%;
+    width: auto;
+    grid-column: 3;
+    grid-row: 2;
 }
 
 .guessInput {
